@@ -1,0 +1,15 @@
+server:
+  port: 1000
+
+# 给每个应用起个名字
+spring:
+  application:
+    name: ShangChouWang-crowd-eureka
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+    register-with-eureka: false
+    fetch-registry: false
