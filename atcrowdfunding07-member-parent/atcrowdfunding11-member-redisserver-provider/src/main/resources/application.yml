@@ -1,0 +1,12 @@
+server:
+  port: 3000
+spring:
+  application:
+    name: ShangChouWang-crowd-redis
+  redis:
+    host: 192.168.12.133
+    timeout: 50000
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:1000/eureka

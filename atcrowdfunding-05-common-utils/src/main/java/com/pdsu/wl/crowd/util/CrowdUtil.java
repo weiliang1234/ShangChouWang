@@ -1,12 +1,20 @@
 package com.pdsu.wl.crowd.util;
 
 import com.pdsu.wl.crowd.constant.CrowdConstant;
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * 工具类
@@ -15,6 +23,43 @@ import java.util.Locale;
  */
 
 public class CrowdUtil {
+
+    /*
+     * 给远程第三方短信接口发送请求把验证码发送到用户手机上
+     * */
+    public static ResultEntity<String> sendShortMessage(String host, String path, String method, String phoneNum, String appcode, String sign, String skin) {
+        Map<String, String> headers = new HashMap<String, String>();
+        //最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
+        headers.put("Authorization", "APPCODE " + appcode);
+        // 生成验证码
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < 4; i++) {
+            int random = (int) (Math.random() * 10);
+            builder.append(random);
+        }
+        String code = builder.toString();
+        Map<String, String> querys = new HashMap<String, String>();
+        querys.put("param", code);
+        querys.put("phone", phoneNum);
+        querys.put("sign", sign);
+        querys.put("skin", skin);
+        try {
+            HttpResponse response = HttpUtils.doGet(host, path, method, headers, querys);
+            //System.out.println(response.toString());如不输出json, 请打开这行代码，打印调试头部状态码。
+            //状态码: 200 正常；400 URL无效；401 appCode错误； 403 次数用完； 500 API网管错误
+            //获取response的body
+            StatusLine statusLine = response.getStatusLine();
+            int statusCode = statusLine.getStatusCode();
+            String reasonPhrase = statusLine.getReasonPhrase();
+            if (statusCode == 200) {
+                return ResultEntity.successWithData(code);
+            }
+            return ResultEntity.Failed(reasonPhrase);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultEntity.Failed(e.getMessage());
+        }
+    }
 
     /**
      * 对明文字符串进行MD5加密

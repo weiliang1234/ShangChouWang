@@ -2,16 +2,18 @@ package com.pdsu.wl.crowd;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 /**
  * @author wl
- * @Date 2021/8/13 19:33
+ * @Date 2021/8/21 15:05
  */
-@EnableEurekaServer
+
+@EnableEurekaClient
 @SpringBootApplication
-public class CrowdMain {
+public class EuthenticationCrowdMain {
+
     public static void main(String[] args) {
-        SpringApplication.run(CrowdMain.class, args);
+        SpringApplication.run(EuthenticationCrowdMain.class, args);
     }
 }

@@ -1,0 +1,27 @@
+server:
+  port: 4000
+spring:
+  application:
+    name: ShangChouWang-crowd-Euthentication
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+  redis:
+    host: 192.168.12.133
+  session:
+    store-type: redis
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:1000/eureka
+
+#发送短信的配置
+short:
+  messages:
+    appcode: 6c50d21fcb734ea5a5f2ce1453a0f59d
+    host: https://feginesms.market.alicloudapi.com
+    method: GET
+    path: /codeNotice
+    sign: 1
+    skin: 1
